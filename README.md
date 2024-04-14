@@ -10,13 +10,11 @@
 A simple <a href="https://www.starbucks.com/">Starbucks</a> app for quick product selection, cart management, and payment.</h4>
 
 <p align="center">
-<img src="https://img.shields.io/badge/License-Apache_2.0-blue">
-<img src="https://img.shields.io/badge/Python-v3.10.12-yellow">
-  <a href="https://hits.seeyoufarm.com"><img src=""/></a>
-<img src="https://img.shields.io/badge/PRs-welcome-green">
-<a href="https://www.paypal.me/madEffort">
-<img src="https://img.shields.io/badge/$-donate-ff69b4">
-</a>
+<a href="https://github.com/madEffort/django-mini-ebay/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue"></a>
+<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-v3.10.12-yellow"></a>
+<a href="https://hits.seeyoufarm.com"><img src=""/></a>
+<a href="https://github.com/madEffort/django-mini-ebay.git"><img src="https://img.shields.io/badge/PRs-welcome-green"></a>
+<a href="https://www.paypal.me/madEffort"><img src="https://img.shields.io/badge/$-donate-ff69b4"></a>
 </p>
 
 <p align="center">
