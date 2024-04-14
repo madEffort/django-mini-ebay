@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/madEffort/django-mini-ebay.git"><img src="https://github.com/madEffort/django-mini-starbucks/assets/158125247/b368f464-666e-4baa-9bb6-dee07783781b" alt="MiniEbay" width="200"></a>
+  <a href="https://github.com/madEffort/django-mini-ebay.git"><img src="" alt="MiniEbay" width="200">작업 중</a>
   <br>
   MiniEbay
   <br>
@@ -62,7 +62,7 @@ This software uses the following open source packages:
 
 ## Related
 
-- [YouTube Data API](https://developers.google.com/youtube/v3)
+- [YouTube Data API v3](https://developers.google.com/youtube/v3)
 
 ## Support
 
