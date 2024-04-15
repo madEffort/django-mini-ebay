@@ -1,4 +1,8 @@
+{% extends 'base.html' %}
+
 {% load humanize %}
+
+{% block content %}
 <h1>구매 내역</h1>
 {% for detail in object.orderdetail_set.all %}
     {{ detail.product_snapshot.name }} | {{ detail.price|intcomma }}원 X {{ detail.quantity }}개 <br>
@@ -7,3 +11,4 @@
 <h3>총 {{object.total_amount|intcomma}}원</h3>
 <br>
 <a href="{% url 'home' %}">홈으로</a>
+{% endblock content %}

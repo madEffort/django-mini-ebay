@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <form method="post">
     {% csrf_token %}
     {{form.as_p}}
@@ -15,3 +18,4 @@
     {% csrf_token %}
     <button type="submit" onclick="return confirm('정말로 삭제하시겠습니까?');">계정 삭제</button>
 </form>
+{% endblock content %}

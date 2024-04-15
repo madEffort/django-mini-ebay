@@ -1,13 +1,96 @@
+{% extends 'base.html' %}
 {% load humanize %}
-<h1>장바구니</h1>
-{% for cart_item in cart_items %}
-    {{ cart_item.product }} | {{ cart_item.product.price|intcomma }}원 | {{ cart_item.quantity }}개 <br>
-{% endfor %}
-<hr>
-총 {{ total_amount|intcomma }}원
-<br>
-<a href="{% url 'home' %}">다시 상품보러 가기</a>
 
-<hr>
-<a href="{% url 'orders:order_create' %}">주문하기</a>
+{% block content %}
+<div class="container mt-5">
+    <h1>장바구니</h1>
+    {% for cart_item in cart_items %}
+    <div class="cart-item" data-item-id="{{ cart_item.id }}">
+        {{ cart_item.product }} |
+        {{ cart_item.product.price|intcomma }}원 |
+        <button class="decrement-button">-</button>
+        <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" class="quantity-field"
+            style="width: 60px;" readonly>개
+        <button class="increment-button">+</button>
+        <button class="remove-button">제거</button>
+    </div>
+    {% endfor %}
+    <hr>
+    총 <span id="total-amount">{{ total_amount|intcomma }}</span>원
+    <br>
+    {% if total_amount != 0 %}
+    <a href="{% url 'orders:order_create' %}">주문하기</a>
+    {% endif %}
+</div>
+{% endblock content %}
 
+
+{% block extra-script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const incrementButtons = document.querySelectorAll('.increment-button');
+        const decrementButtons = document.querySelectorAll('.decrement-button');
+        const removeButtons = document.querySelectorAll('.remove-button');
+
+        incrementButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const quantityField = this.parentNode.querySelector('.quantity-field');
+                const newQuantity = parseInt(quantityField.value) + 1;
+                quantityField.value = newQuantity;
+                const cartItemId = this.parentNode.dataset.itemId;
+                updateCartItem(cartItemId, newQuantity);
+            });
+        });
+
+        decrementButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const quantityField = this.parentNode.querySelector('.quantity-field');
+                if (parseInt(quantityField.value) > 1) {  // Prevent quantity from going below 1
+                    const newQuantity = parseInt(quantityField.value) - 1;
+                    quantityField.value = newQuantity;
+                    const cartItemId = this.parentNode.dataset.itemId;
+                    updateCartItem(cartItemId, newQuantity);
+                }
+            });
+        });
+
+        removeButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const cartItemId = this.parentNode.dataset.itemId;
+                removeCartItem(cartItemId);
+            });
+        });
+
+        function updateCartItem(cartItemId, quantity) {
+            fetch('{% url "carts:update_cart" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ cartItemId: cartItemId, quantity: quantity })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('total-amount').textContent = data.total_amount;
+                });
+        }
+
+        function removeCartItem(cartItemId) {
+            fetch('{% url "carts:update_cart" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ cartItemId: cartItemId, remove: true })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector(`div[data-item-id="${cartItemId}"]`).remove();
+                    document.getElementById('total-amount').textContent = data.total_amount;
+                });
+        }
+    });
+</script>
+{% endblock extra-script %}

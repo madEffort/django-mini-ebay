@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
 {% for order in object_list %}
-    주문시간 : {{order.order_date}} => <a href="{% url 'orders:order_detail' order.id %}">자세히 보기</a> <br>
+주문시간 : {{order.order_date}} => <a href="{% url 'orders:order_detail' order.id %}">자세히 보기</a> <br>
 {% endfor %}
+{% endblock content %}

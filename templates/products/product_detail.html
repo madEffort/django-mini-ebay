@@ -1,5 +1,7 @@
+{% extends 'base.html' %}
 {% load humanize %}
 
+{% block content %}
 상품 이름: {{ object.name }} <br>
 설명 : {{ object.description}} <br>
 가격 : {{ object.price|intcomma }}원 <br>
@@ -22,4 +24,6 @@
     {% endfor %}
 </ul>
 {% endif %}
+{% endblock content %}
+
 <a href="{% url 'home' %}">홈으로</a>

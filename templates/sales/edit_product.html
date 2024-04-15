@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <form method="post">
     {% csrf_token %}
     {{form.as_p}}
@@ -7,3 +10,4 @@
     {% csrf_token %}
     <button type="submit">상품 삭제</button>
 </form>
+{% endblock content %}
