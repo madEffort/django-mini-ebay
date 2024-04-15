@@ -91,7 +91,7 @@ This software uses the following open source packages:
 
 ## Related
 
-- [YouTube Data API v3](https://developers.google.com/youtube/v3)
+
 
 ## Support
 
