@@ -7,7 +7,7 @@
 </h1>
 
 <h4 align="center">
-A simple <a href="https://www.starbucks.com/">Starbucks</a> app for quick product selection, cart management, and payment.</h4>
+</h4>
 
 <p align="center">
 <a href="https://github.com/madEffort/django-mini-ebay/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue"></a>
