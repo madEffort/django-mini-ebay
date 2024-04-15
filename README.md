@@ -36,6 +36,24 @@ A simple <a href="https://www.starbucks.com/">Starbucks</a> app for quick produc
 - 구매 이력 조회
 - 장바구니 기능
 
+
+pip 사용자의 경우
+```bash
+# Clone this repository
+$ git clone https://github.com/madEffort/django-mini-ebay.git
+
+# Go into the repository
+$ cd django-mini-ebay
+
+# Install dependencies
+$ pip install
+```
+슈퍼유저 생성후 카테고리를 추가하고 상품 추가해줘야 합니다.
+
+슈퍼유저 생성시 이메일은 **필수**로 입력하여야 합니다.
+
+
+
 ## How To Use
 
 To clone and run this application, you'll need [Git](https://git-scm.com) and [Python](https://www.python.org/downloads/) installed on your computer. From your command line:
@@ -50,6 +68,7 @@ $ cd django-mini-ebay
 # Install dependencies
 $ poetry install
 ```
+
 
 After setting up the database and templates, please use the `makemigrations`, `migrate` and `collectstatic` commands.
 
