@@ -1,0 +1,6 @@
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">등록</button>
+</form>
+<a href="{% url 'home' %}">홈으로</a>

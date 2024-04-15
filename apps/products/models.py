@@ -1,5 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 # 카테고리 모델
 class Category(models.Model):
@@ -12,6 +14,7 @@ class Category(models.Model):
 
 # 상품 모델
 class Product(models.Model):
+    seller = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.IntegerField()

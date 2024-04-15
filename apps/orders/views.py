@@ -26,7 +26,7 @@ def order_create(request):
             user=user,
             total_amount=total_amount,
         )
-
+        
         # 주문에 카트에 담긴 상품들 추가 하여 db에 저장
         for item in cart_items:
             OrderDetail.objects.create(
@@ -56,6 +56,6 @@ class OrderList(LoginRequiredMixin, ListView):
         return Order.objects.filter(user=self.request.user)
 
 
-class OrderDetail(LoginRequiredMixin, DetailView):
+class OrderLogDetail(LoginRequiredMixin, DetailView):
     model = Order
     template_name = "orders/order_detail.html"

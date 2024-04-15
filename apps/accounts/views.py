@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, UpdateView
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth import get_user_model, logout
@@ -7,7 +7,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+from django.http import HttpResponseRedirect
 User = get_user_model()
 
 
@@ -15,12 +15,8 @@ class SignupView(CreateView):
     form_class = CustomUserCreationForm
     template_name = "registration/signup.html"
 
-    def form_valid(self, form):
-        return super().form_valid(form)
-
     def get_success_url(self):
-        return redirect("home")
-
+        return reverse_lazy('home')
 
 class EditView(LoginRequiredMixin, UpdateView):
     model = User
@@ -29,9 +25,6 @@ class EditView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return self.request.user
-
-    def form_valid(self, form):
-        return super().form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, "수정되었습니다.")
