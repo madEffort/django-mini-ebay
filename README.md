@@ -24,7 +24,17 @@ A simple <a href="https://www.starbucks.com/">Starbucks</a> app for quick produc
 
 ## Key Features
 
+**2024/04/15 - 현재 구현된 기능**
 
+- 유저 관련 기능
+  - 회원 가입, 탈퇴
+  - 로그인, 회원 정보 수정
+- 구매자 기능
+  - 판매 중인 물건 구매
+- 판매자 기능
+  - 판매할 물건 등록, 삭제, 수정
+- 구매 이력 조회
+- 장바구니 기능
 
 ## How To Use
 
