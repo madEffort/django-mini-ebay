@@ -1,0 +1,17 @@
+<form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">저장</button>
+</form>
+<hr>
+<a href="{% url 'accounts:password_change' %}">비밀번호 변경</a>
+<br>
+<a href="{% url 'home' %}">홈으로</a>
+<br>
+<br>
+<br>
+
+<form action="{% url 'accounts:delete_account' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" onclick="return confirm('정말로 삭제하시겠습니까?');">계정 삭제</button>
+</form>

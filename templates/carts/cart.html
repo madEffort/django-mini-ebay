@@ -1,0 +1,13 @@
+{% load humanize %}
+<h1>장바구니</h1>
+{% for cart_item in cart_items %}
+    {{ cart_item.product }} | {{ cart_item.product.price|intcomma }}원 | {{ cart_item.quantity }}개 <br>
+{% endfor %}
+<hr>
+총 {{ total_amount|intcomma }}원
+<br>
+<a href="{% url 'home' %}">다시 상품보러 가기</a>
+
+<hr>
+<a href="{% url 'orders:order_create' %}">주문하기</a>
+

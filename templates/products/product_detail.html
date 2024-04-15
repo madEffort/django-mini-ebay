@@ -1,0 +1,24 @@
+{% load humanize %}
+
+상품 이름: {{ object.name }} <br>
+설명 : {{ object.description}} <br>
+가격 : {{ object.price|intcomma }}원 <br>
+남은 수량 : {{ object.stock_quantity }} <br>
+카테고리 : {{ object.category.name }}
+<br>
+<hr>
+<form method="post">
+    {% csrf_token %}
+    <input type="number" name="quantity" value="1" min="1">
+    <button type="submit" name="add_to_cart">장바구니 담기</button>
+    <button type="submit" name="order_now">바로 주문하기</button>
+</form>
+{% if form.errors %}
+<ul>
+    {% for field in form %}
+    {% for error in field.errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+    {% endfor %}
+</ul>
+{% endif %}

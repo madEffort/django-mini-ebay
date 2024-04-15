@@ -1,0 +1,35 @@
+{% if messages %}
+{% for message in messages %}
+<script>
+    alert("{{ message }}");
+</script>
+{% endfor %}
+{% endif %}
+
+<h1>계정 관련</h1>
+{% if user.is_active %}
+    <form action="{% url 'accounts:logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">로그아웃</button>
+    </form>
+    <hr>
+    <a href="{% url 'accounts:edit' %}">계정 정보 수정</a>
+<hr>
+<h1>결제한 내역이 있으면 아래에 주문내역 보기 버튼이 나옴</h1>
+{% if orders %}
+<a href="{% url 'orders:order_list' %}">주문내역 보기</a>
+{% endif %}
+{% else %}
+    <a href="{% url 'accounts:signup' %}">Sign Up</a>
+    <hr>
+    <a href="{% url 'accounts:login' %}">Log In</a>
+{% endif %}
+<hr>
+
+
+<h1>상품 리스트</h1>
+<br>
+{% for object in object_list %}
+    <a href="{% url 'products:product_detail' object.id %}">{{ object.name }}</a>
+    <hr>
+{% endfor %}

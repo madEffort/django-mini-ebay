@@ -1,0 +1,13 @@
+{% load humanize %}
+<h1>아래의 상품들을 주문하시겠습니까?</h1>
+{% for cart_item in cart_items %}
+    {{ cart_item.product }} | {{ cart_item.product.price|intcomma }}원 | {{ cart_item.quantity }}개 <br>
+{% endfor %}
+<hr>
+총 {{ total_amount|intcomma }}원
+<br>
+<hr>
+<form method="post">
+    {% csrf_token %}
+    <button type="post">결제하기</button>
+</form>
