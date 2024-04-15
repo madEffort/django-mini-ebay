@@ -1,7 +1,7 @@
 {% load humanize %}
 <h1>구매 내역</h1>
 {% for detail in object.orderdetail_set.all %}
-    {{ detail.product.name }} | {{ detail.price|intcomma }}원 X {{ detail.quantity }}개 <br>
+    {{ detail.product_snapshot.name }} | {{ detail.price|intcomma }}원 X {{ detail.quantity }}개 <br>
 {% endfor %}
 <hr>
 <h3>총 {{object.total_amount|intcomma}}원</h3>

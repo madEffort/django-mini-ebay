@@ -17,8 +17,12 @@
     <hr>
     <h1>판매자일 경우 아래에 상품 등록하러 갈 수 있는 링크가 보임</h1>
     {% if user.is_seller %}
-    
         <a href="{% url 'sales:register_product' %}">상품 등록하기</a>
+        <hr>
+        <h1>등록한 상품</h1>
+        {% for product in products %}
+            <a href="{% url 'sales:edit_product' product.id %}">{{product}} 상품 수정하러가기</a>
+        {% endfor %}
     {% endif %}
 <hr>
 <h1>결제한 내역이 있으면 아래에 주문내역 보기 버튼이 나옴</h1>

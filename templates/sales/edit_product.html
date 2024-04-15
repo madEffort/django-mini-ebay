@@ -1,0 +1,9 @@
+<form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">수정</button>
+</form>
+<form action="{% url 'sales:delete_product' product.id%}" method="post">
+    {% csrf_token %}
+    <button type="submit">상품 삭제</button>
+</form>

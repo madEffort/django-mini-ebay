@@ -15,8 +15,10 @@ class ProductList(ListView):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             context["orders"] = Order.objects.filter(user=self.request.user)
+            context['products'] = Product.objects.filter(seller=self.request.user)
         else:
             context["orders"] = None
+            context['products'] = None
         return context
 
 

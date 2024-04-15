@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from apps.products.models import Product
+from apps.products.models import Product, ProductSnapshot
 
 User = get_user_model()
 
@@ -26,7 +26,7 @@ class Order(models.Model):
 # 주문 상세 모델
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_snapshot = models.ForeignKey(ProductSnapshot, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     price = models.IntegerField()
 

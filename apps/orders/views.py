@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView
 from apps.carts.models import Cart
+from apps.products.models import ProductSnapshot
 from .models import Order, OrderDetail
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -29,11 +30,23 @@ def order_create(request):
         
         # 주문에 카트에 담긴 상품들 추가 하여 db에 저장
         for item in cart_items:
+            
+            snapshot, created = ProductSnapshot.objects.get_or_create(
+                product=item.product,
+                seller=item.product.seller,
+                name=item.product.name,
+                description=item.product.description,
+                price=item.product.price,
+                stock_quantity=item.product.stock_quantity,
+                category=item.product.category,
+                defaults={'product': item.product}
+            )
+            
             OrderDetail.objects.create(
                 order=order,
-                product=item.product,
+                product_snapshot=snapshot,
                 quantity=item.quantity,
-                price=item.product.price,
+                price=snapshot.price,
             )
 
         # DB에 저장한 후에는 카트 비우기

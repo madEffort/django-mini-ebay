@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product
+from .models import Category, Product, ProductSnapshot
 
 
 class ProductInline(admin.StackedInline):
@@ -14,4 +14,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(ProductSnapshot)
+class ProductSnapshotAdmin(admin.ModelAdmin):
     pass
