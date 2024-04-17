@@ -10,7 +10,7 @@ from django.http import JsonResponse
 @login_required
 def cart(request):
     user = request.user
-    cart = Cart.objects.get(user=user)
+    cart, _ = Cart.objects.get_or_create(user=user)
     cart_items = cart.cartdetail_set.all()
     total_amount = sum(item.product.price * item.quantity for item in cart_items)
     

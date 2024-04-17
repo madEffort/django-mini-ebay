@@ -7,7 +7,8 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth import authenticate, login
 User = get_user_model()
 
 
@@ -15,6 +16,15 @@ class SignupView(CreateView):
     form_class = CustomUserCreationForm
     template_name = "registration/signup.html"
 
+
+    def form_valid(self, form):
+        valid = super(SignupView, self).form_valid(form)
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password1')
+        user = authenticate(request=self.request, username=username, password=password)
+        login(self.request, user)
+        return valid
+    
     def get_success_url(self):
         return reverse_lazy('home')
 
@@ -33,7 +43,7 @@ class EditView(LoginRequiredMixin, UpdateView):
 
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     template_name = "registration/password_change.html"
-    success_url = reverse_lazy("password_change_done")
+    success_url = reverse_lazy("accounts:password_change_done")
 
 
 @login_required

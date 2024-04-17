@@ -1,11 +1,37 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">가입하기</button>
-</form>
+<h1 class="text-center mb-3">회원가입</h1>
+<div class="form-container">
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label for="{{ form.username.id_for_label }}">아이디</label>
+            {% render_field form.username class="form-control" %}
+        </p>
+        <p>
+            <label for="{{ form.password1.id_for_label }}">비밀번호</label>
+            {% render_field form.password1 class="form-control" %}
+        </p>
+        <p>
+            <label for="{{ form.password2.id_for_label }}">비밀번호 확인</label>
+            {% render_field form.password2 class="form-control" %}
+        </p>
+        <p>
+            <label for="{{ form.first_name.id_for_label }}">이름</label>
+            {% render_field form.first_name class="form-control" %}
+        </p>
+        <p>
+            <label for="{{ form.last_name.id_for_label }}">성(이름)</label>
+            {% render_field form.last_name class="form-control" %}
+        </p>
+        <p>
+            <label for="{{ form.email.id_for_label }}">이메일(필수)</label>
+            {% render_field form.email class="form-control" %}
+        </p>
+        <button class="btn btn-outline-primary w-100 " type="submit" class="submit-button">가입하기</button>
+    </form>
+</div>
 
-<a href="{% url 'home' %}">홈으로</a>
 {% endblock content %}

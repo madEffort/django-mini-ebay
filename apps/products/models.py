@@ -17,6 +17,7 @@ class Product(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     description = models.TextField()
+    image = models.ImageField(upload_to='products/')
     price = models.IntegerField()
     stock_quantity = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -29,6 +30,8 @@ class Product(models.Model):
             orig = Product.objects.get(pk=self.pk)
             if (orig.name != self.name or orig.price != self.price):  # 이름이나 가격에 변화가 있는 경우
                 self.create_snapshot()
+            if orig.image != self.image:  # 이미지 변경 후 이전 이미지 삭제
+                orig.image.delete(save=False)
         super().save(*args, **kwargs)
     
     def create_snapshot(self):
@@ -53,5 +56,8 @@ class ProductSnapshot(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     snapshot_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-snapshot_date']
+    
     def __str__(self):
         return f"Snapshot of {self.name} on {self.snapshot_date.strftime('%Y-%m-%d')}"

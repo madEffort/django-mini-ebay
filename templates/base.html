@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load widget_tweaks %}
+{% load static %}
 
 <head>
     <meta charset="UTF-8">
@@ -9,6 +11,7 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
         integrity="sha384-vZJx9n8xUm8rPwhHhaUpPegi5h9R7DEpZJqzFmq8H7lMdC-4iQ6g9Rrtpp7lvR7F" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}">
     <style>
         html,
         body {
@@ -53,8 +56,8 @@
     <div class="wrapper">
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'home' %}">MiniEbay</a>
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'miniebay.png' %}" alt="logo" width="150"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -63,20 +66,31 @@
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                         <a class="nav-link" aria-current="page" href="{% url 'home' %}">홈</a>
-                        <a class="nav-link" href="{% url 'carts:cart' %}">장바구니</a>
+                        {% block category-link %}
+                        {% endblock category-link %}                        
+                        {% if user.is_active %}
+                            {% if not user.is_seller %}
+                            <a class="nav-link" href="{% url 'carts:cart' %}">장바구니</a>
+                            {% endif %}
+                            {% if user.is_seller %}
+                            <a class="nav-link" href="{% url 'sales:register_product' %}">상품 등록</a>
+                            {% endif %}
+                        {% endif %}
                     </div>
                     {% if user.is_authenticated %}
-                    <div class="d-flex ms-auto">
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-link" href="{% url 'accounts:edit' %}">{{user}}</a>
+                        <span class="nav-link">|</span>
                         <form action="{% url 'accounts:logout' %}" method="post">
                             {% csrf_token %}
-                            <button class="btn btn-outline-success me-2" type="submit">로그아웃</button>
+                            <button class="nav-link" type="submit">로그아웃</button>
                         </form>
                     </div>
                     {% else %}
-                    <div class="d-flex ms-auto">
-                        <a class="btn btn-outline-success me-2" href="{% url 'accounts:login' %}">Login</a>
-                        <a class="btn btn-outline-success login-signup-btn" href="{% url 'accounts:signup' %}">Sign
-                            Up</a>
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-link" href="{% url 'accounts:login' %}">로그인</a>
+                        <span class="nav-link">|</span>
+                        <a class="nav-link" href="{% url 'accounts:signup' %}">회원가입</a>
                     </div>
                     {% endif %}
                 </div>

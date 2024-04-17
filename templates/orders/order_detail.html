@@ -5,6 +5,7 @@
 {% block content %}
 <h1>구매 내역</h1>
 {% for detail in object.orderdetail_set.all %}
+    {{ detail.product_snapshot.product }}
     {{ detail.product_snapshot.name }} | {{ detail.price|intcomma }}원 X {{ detail.quantity }}개 <br>
 {% endfor %}
 <hr>

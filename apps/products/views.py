@@ -1,24 +1,33 @@
 from typing import Any
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView
-from .models import Product
+from .models import Product, Category
 from apps.carts.models import Cart, CartDetail
 from apps.carts.forms import AddToCartForm
 from apps.orders.models import Order
-
+from django.http import JsonResponse
+import json
+from django.core.serializers import serialize
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 class ProductList(ListView):
     model = Product
     template_name = "products/product_list.html"
-
+    paginate_by = 12
+    
     def get_context_data(self, **kwargs: Any):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             context["orders"] = Order.objects.filter(user=self.request.user)
             context['products'] = Product.objects.filter(seller=self.request.user)
+            cart, _ = Cart.objects.get_or_create(user=self.request.user)
+            context['cart'] = cart
+            context['categories'] = Category.objects.all()
         else:
             context["orders"] = None
             context['products'] = None
+            context['cart'] = None
+            context['categories'] = Category.objects.all()
         return context
 
 
@@ -82,3 +91,16 @@ def product_detail(request, pk):
     context = {"object": product, "form": form}
 
     return render(request, "products/product_detail.html", context)
+
+def product_category(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        category_id = data['categoryId']
+        if data['mode'] == 0:
+            products = Product.objects.filter(seller=request.user, category_id=category_id)
+        else:
+            products = Product.objects.filter(category_id=category_id)
+        context = {
+            'category_products': serialize('json', products)
+        }
+        return JsonResponse(context)

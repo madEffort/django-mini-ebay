@@ -1,50 +1,283 @@
 {% extends 'base.html' %}
 
+{% load humanize %}
+
+{% block extra-style %}
+    <style>
+        
+        .truncate {
+            white-space: nowrap; /* 글자들을 한 줄에 표시 */
+            overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
+            text-overflow: ellipsis; /* 넘친 내용을 ellipsis(...)로 표시 */
+            max-width: 100%; /* 최대 너비 설정 */
+        }
+
+        .pagination a {
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        .pagination a:hover {
+            background-color: #007bff; /* Bootstrap primary color */
+            color: white;
+        }
+
+        .pagination .active .page-link {
+            background-color: #007bff; /* Bootstrap primary color */
+            border-color: #007bff; /* Same as background to make it seamless */
+        }
+
+        .pagination .disabled .page-link {
+            color: #6c757d; /* Bootstrap disabled color */
+            pointer-events: none; /* Disables link interactions and mouse events */
+        }
+
+    </style>
+{% endblock extra-style %}
+
+{% block category-link %}
+<div class="dropdown open">
+    <button
+        class="nav-link"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+    >
+    카테고리
+    </button>
+    <div class="dropdown-menu" aria-labelledby="triggerId">
+        {% for category in categories %}
+            {% if user.is_seller %}
+                <button class="dropdown-item" id="{{category.name}}" onclick="filterProducts(parseInt('{{category.id}}'), '{{category.name}}', 0)">{{category}}</button>
+            {% else %}
+                <button class="dropdown-item" id="{{category.name}}" onclick="filterProducts(parseInt('{{category.id}}'), '{{category.name}}', 1)">{{category}}</button>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+    
+{% endblock category-link %}
 
 {% block content %}
+{% if not user.is_seller %}
+<h2 id="category-name">전체</h2>
+<hr>
+{% endif %}
 
-
-
-<h1>계정 관련</h1>
 {% if user.is_active %}
-<form action="{% url 'accounts:logout' %}" method="post">
-    {% csrf_token %}
-    <button type="submit">로그아웃</button>
-</form>
-<hr>
-<a href="{% url 'accounts:edit' %}">계정 정보 수정</a>
-<hr>
-<h1>판매자일 경우 아래에 상품 등록하러 갈 수 있는 링크가 보임</h1>
-{% if user.is_seller %}
-<a href="{% url 'sales:register_product' %}">상품 등록하기</a>
-<hr>
-<h1>등록한 상품</h1>
-{% for product in products %}
-<a href="{% url 'sales:edit_product' product.id %}">{{product}} 상품 수정하러가기</a>
-{% endfor %}
-{% endif %}
-<hr>
-<h1>결제한 내역이 있으면 아래에 주문내역 보기 버튼이 나옴</h1>
-{% if orders %}
-<a href="{% url 'orders:order_list' %}">주문내역 보기</a>
-{% endif %}
+
+    {% if user.is_seller %}
+        <!-- 판매자 모드 -->
+        <h2 id="category-name-seller">{{user}}님이 등록하신 상품 목록</h2>
+        <hr>
+        <div class="row mt-4" id="product-display-seller">
+        {% for product in products %}
+            <div class="col-3">
+                <div class="card mb-4">
+                    <a class="text-decoration-none " href="{% url 'sales:edit_product' product.id %}">
+                        <div class="card-body">
+                            <div>
+                                <img src="/uploads/{{product.image}}" alt="{{product}}" width="100%" height="228" class="mb-2 ">
+                                <h5 class="card-title truncate">{{product.name}}</h5>
+                                <h5 class="card-text text-decoration-none text-black">{{product.price|intcomma}}원</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+        {% else %}
+        <!-- 로그인 일반 모드 -->
+        <div class="row mt-4">
+            <div class="col-9" id="product-display-login">
+                <!-- 상품 리스트 -->
+                <div class="row">
+                    {% for object in object_list %}
+                    <div class="col-4">
+                        <div class="card mb-4">
+                            <a class="text-decoration-none " href="{% url 'products:product_detail' object.id %}">
+                                <div class="card-body">
+                                    <div>
+                                        <img src="/uploads/{{object.image}}" alt="{{object}}" width="100%" height="228" class="mb-2 ">
+                                        <h5 class="card-title truncate">{{object.name}}</h5>
+                                        <h5 class="card-text text-decoration-none text-black">{{object.price|intcomma}}원</h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="d-flex justify-content-center my-4">
+                    {% if is_paginated %}
+                        <nav>
+                            <ul class="pagination">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1" aria-label="First">
+                                            <span aria-hidden="true">&laquo;&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">
+                                            <span aria-hidden="true">&laquo;&laquo;</span>
+                                        </span>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <span class="page-link">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </span>
+                                    </li>
+                                {% endif %}
+                
+                                <!-- Current Page Indicator -->
+                                <li class="page-item" aria-current="page">
+                                    <span class="page-link">
+                                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                                    </span>
+                                </li>
+                
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                                            <span aria-hidden="true">&raquo;&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </span>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <span class="page-link">
+                                            <span aria-hidden="true">&raquo;&raquo;</span>
+                                        </span>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
+                
+            </div>
+
+            <div class="col-3">
+                <!-- 장바구니 -->
+                <div class="sticky-top">
+                    <a class="text-decoration-none text-black " href="{% url 'carts:cart' %}"><h4 class="text-center ">장바구니</h4></a>
+                    {% for cart_item in cart.cartdetail_set.all %}
+                        <hr>
+                        <div>
+                            <a class="text-decoration-none " href="{% url 'products:product_detail' cart_item.product.id %}">
+                                <div class="row">
+                                    <div class="col-4 px-4">
+                                        <img src="/uploads/{{cart_item.product.image}}" alt="{{cart_item.product.name}}" width="80">
+                                    </div>
+                                    <div class="col-8 px-4">
+                                        <div class="truncate">{{cart_item.product.name}}</div>
+                                        <div class="text-black ">{{cart_item.quantity}}개</div>
+                                    </div>
+                                </div>
+                            </a>
+                            
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% else %}
-<a href="{% url 'accounts:signup' %}">Sign Up</a>
-<hr>
-<a href="{% url 'accounts:login' %}">Log In</a>
+<div class="row mt-4" id="product-display-nologin">
+    {% for object in object_list %}
+        <div class="col-3">
+            <div class="card mb-4">
+                <a class="text-decoration-none " href="{% url 'products:product_detail' object.id %}">
+                    <div class="card-body">
+                        <div>
+                            <img src="/uploads/{{object.image}}" alt="{{object}}" width="100%" height="228" class="mb-2 ">
+                            <h5 class="card-title truncate">{{object.name}}</h5>
+                            <h5 class="card-text text-decoration-none text-black">{{object.price|intcomma}}원</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="d-flex justify-content-center my-4">
+        {% if is_paginated %}
+            <nav>
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="First">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </span>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                <span aria-hidden="true">&laquo;</span>
+                            </span>
+                        </li>
+                    {% endif %}
+    
+                    <!-- Current Page Indicator -->
+                    <li class="page-item" aria-current="page">
+                        <span class="page-link">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                <span aria-hidden="true">&raquo;</span>
+                            </span>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
 {% endif %}
-<hr>
-
-
-<h1>상품 리스트</h1>
-<br>
-{% for object in object_list %}
-<a href="{% url 'products:product_detail' object.id %}">{{ object.name }}</a>
-<hr>
-{% endfor %}
-
-
-
 
 {% endblock content %}
 
@@ -57,4 +290,91 @@
 </script>
 {% endfor %}
 {% endif %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    axios.defaults.headers.common['X-CSRFToken'] = '{{ csrf_token }}'
+    const product_display_login = document.getElementById('product-display-login')
+    function filterProducts(categoryId, categoryName, mode) {
+        axios({
+            method: 'post',
+            url: '{% url "products:product_category" %}',
+            data: {
+                categoryId: categoryId,
+                mode: mode
+            }
+        }) 
+        .then(response => {
+            const products = JSON.parse(response.data.category_products);
+            console.log(products)
+            let htmlContent = '';
+            
+            const loginDisplay = document.getElementById('product-display-login')
+            const nologinDisplay = document.getElementById('product-display-nologin')
+
+            if(mode === 0) {
+                products.forEach(product => {
+                    htmlContent += `
+                    <div class="col-3">
+                <div class="card mb-4">
+                    <a class="text-decoration-none " href="/sales/edit/${product.pk}">
+                        <div class="card-body">
+                            <div>
+                                <img src="/uploads/${product.fields.image}" alt="${product.fields.name}" width="100%" height="228" class="mb-2 ">
+                                <h5 class="card-title truncate">${product.fields.name}</h5>
+                                <h5 class="card-text text-decoration-none text-black">${product.fields.price.toLocaleString()}원</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>`;
+                });
+                document.getElementById('category-name-seller').textContent = '"'+categoryName+'"' + ' 카테고리에 등록하신 상품 목록';
+                document.getElementById("product-display-seller").innerHTML = htmlContent;
+            } else {
+                document.getElementById('category-name').innerHTML = '"'+categoryName+'"' + " 상품 목록";
+                if(loginDisplay != null) {
+                    products.forEach(product => {
+                    htmlContent += `
+                        <div class="col-4">
+                            <div class="card mb-4">
+                                <a class="text-decoration-none" href="/products/products/${product.pk}">
+                                    <div class="card-body">
+                                        <img src="/uploads/${product.fields.image}" alt="${product.fields.name}" width="100%" height="228" class="mb-2">
+                                        <h5 class="card-title truncate">${product.fields.name}</h5>
+                                        <h5 class="card-text text-decoration-none text-black">${product.fields.price.toLocaleString()}원</h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>`;
+                    });
+                    document.getElementById('product-display-login').innerHTML = '<div class="row mt-4">' + htmlContent + '</div>';
+                }
+                if(nologinDisplay != null) {
+                    products.forEach(product => {
+                    htmlContent += `
+                        <div class="col-3">
+                            <div class="card mb-4">
+                                <a class="text-decoration-none" href="/products/products/${product.pk}">
+                                    <div class="card-body">
+                                        <img src="/uploads/${product.fields.image}" alt="${product.fields.name}" width="100%" height="228" class="mb-2">
+                                        <h5 class="card-title truncate">${product.fields.name}</h5>
+                                        <h5 class="card-text text-decoration-none text-black">${product.fields.price.toLocaleString()}원</h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>`;
+                    });
+                    document.getElementById('product-display-nologin').innerHTML = '<div class="row mt-4">' + htmlContent + '</div>';
+                }
+                
+                
+            }
+            
+
+            
+        })
+        .catch(error => console.error('Error loading the products:', error));
+    }
+</script>
+
 {% endblock extra-script %}

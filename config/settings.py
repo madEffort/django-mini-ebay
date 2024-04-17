@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",  # 세자리 마다 쉼표 필터
+    'widget_tweaks',
     "apps.accounts",
     "apps.products",
     "apps.orders",

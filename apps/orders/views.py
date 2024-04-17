@@ -31,7 +31,20 @@ def order_create(request):
         # 주문에 카트에 담긴 상품들 추가 하여 db에 저장
         for item in cart_items:
             
-            snapshot, created = ProductSnapshot.objects.get_or_create(
+            # snapshot, created = ProductSnapshot.objects.get_or_create(
+            #     product=item.product,
+            #     seller=item.product.seller,
+            #     name=item.product.name,
+            #     description=item.product.description,
+            #     price=item.product.price,
+            #     stock_quantity=item.product.stock_quantity,
+            #     category=item.product.category,
+            #     defaults={'product': item.product}
+            # )
+            latest_snapshot = ProductSnapshot.objects.filter(product=item.product).first()
+            
+            if not latest_snapshot:
+                snapshot = ProductSnapshot.objects.create(
                 product=item.product,
                 seller=item.product.seller,
                 name=item.product.name,
@@ -39,8 +52,9 @@ def order_create(request):
                 price=item.product.price,
                 stock_quantity=item.product.stock_quantity,
                 category=item.product.category,
-                defaults={'product': item.product}
             )
+            else: 
+                snapshot = latest_snapshot
             
             OrderDetail.objects.create(
                 order=order,

@@ -1,95 +1,121 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load humanize %}
 
 {% block content %}
 <div class="container mt-5">
-    <h1>장바구니</h1>
-    {% for cart_item in cart_items %}
-    <div class="cart-item" data-item-id="{{ cart_item.id }}">
-        {{ cart_item.product }} |
-        {{ cart_item.product.price|intcomma }}원 |
-        <button class="decrement-button">-</button>
-        <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" class="quantity-field"
-            style="width: 60px;" readonly>개
-        <button class="increment-button">+</button>
-        <button class="remove-button">제거</button>
+    <h1 class="text-center mb-4">장바구니</h1>
+    <div class="cart-items">
+        {% for cart_item in cart_items %}
+            <div class="cart-item d-flex align-items-center justify-content-start mb-3 p-2 bg-light rounded" data-item-id="{{ cart_item.id }}">
+                <a href="{% url 'products:product_detail' cart_item.product.id %}">
+                    <img class="img-fluid rounded mr-3" src="/uploads/{{ cart_item.product.image }}" alt="{{ cart_item.product.name }}" width="80">
+                </a>
+                <div class="item-details flex-grow-1">
+                    <div class="fw-bold px-4">
+                        <a href="{% url 'products:product_detail' cart_item.product.id %}">{{ cart_item.product.name }}</a>
+                    </div>
+                    <div class="px-4">{{ cart_item.product.price|intcomma }}원</div>
+                </div>
+                <div class="quantity-controls d-flex align-items-center">
+                    <button class="btn btn-outline-secondary decrement-button">-</button>
+                    <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" class="form-control quantity-field text-center mx-2" style="width: 60px;" readonly>
+                    <button class="btn btn-outline-secondary increment-button">+</button>
+                </div>
+                <button class="btn btn-danger remove-button ms-2">제거</button>
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
     <hr>
-    총 <span id="total-amount">{{ total_amount|intcomma }}</span>원
-    <br>
+    <div class="d-flex justify-content-end align-items-center">
+        <h4>총 <span id="total-amount">{{ total_amount|intcomma }}</span>원</h4>
+        
+    </div>
+
+    <div class="d-flex justify-content-end align-items-center">
     {% if total_amount != 0 %}
-    <a href="{% url 'orders:order_create' %}">주문하기</a>
-    {% endif %}
+            <a class="btn btn-primary ml-3" href="{% url 'orders:order_create' %}">주문하기</a>
+        {% endif %}
+    </div>
 </div>
 {% endblock content %}
-
 
 {% block extra-script %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const incrementButtons = document.querySelectorAll('.increment-button');
-        const decrementButtons = document.querySelectorAll('.decrement-button');
-        const removeButtons = document.querySelectorAll('.remove-button');
+        const cartItemsContainer = document.querySelector('.cart-items');
 
-        incrementButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const quantityField = this.parentNode.querySelector('.quantity-field');
-                const newQuantity = parseInt(quantityField.value) + 1;
+        cartItemsContainer.addEventListener('click', function (event) {
+            let target = event.target;
+            let cartItem = target.closest('.cart-item');
+
+            if (!cartItem) return;
+
+            let quantityField = cartItem.querySelector('.quantity-field');
+            let cartItemId = cartItem.dataset.itemId;
+            let newQuantity;
+
+            if (target.classList.contains('increment-button')) {
+                newQuantity = parseInt(quantityField.value) + 1;
                 quantityField.value = newQuantity;
-                const cartItemId = this.parentNode.dataset.itemId;
-                updateCartItem(cartItemId, newQuantity);
-            });
-        });
-
-        decrementButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const quantityField = this.parentNode.querySelector('.quantity-field');
-                if (parseInt(quantityField.value) > 1) {  // Prevent quantity from going below 1
-                    const newQuantity = parseInt(quantityField.value) - 1;
+                updateCartItem(cartItemId, newQuantity, cartItem);
+            } else if (target.classList.contains('decrement-button')) {
+                newQuantity = parseInt(quantityField.value) - 1;
+                if (newQuantity >= 1) {
                     quantityField.value = newQuantity;
-                    const cartItemId = this.parentNode.dataset.itemId;
-                    updateCartItem(cartItemId, newQuantity);
+                    updateCartItem(cartItemId, newQuantity, cartItem);
                 }
-            });
+            } else if (target.classList.contains('remove-button')) {
+                removeCartItem(cartItemId, cartItem);
+            }
         });
 
-        removeButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const cartItemId = this.parentNode.dataset.itemId;
-                removeCartItem(cartItemId);
-            });
-        });
-
-        function updateCartItem(cartItemId, quantity) {
+        function updateCartItem(cartItemId, quantity, cartItem) {
             fetch('{% url "carts:update_cart" %}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
                 body: JSON.stringify({ cartItemId: cartItemId, quantity: quantity })
             })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('total-amount').textContent = data.total_amount;
-                });
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('total-amount').textContent = data.total_amount.toLocaleString();
+            })
+            .catch(error => console.error('Error updating cart:', error));
         }
 
-        function removeCartItem(cartItemId) {
+        function removeCartItem(cartItemId, cartItem) {
             fetch('{% url "carts:update_cart" %}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
                 body: JSON.stringify({ cartItemId: cartItemId, remove: true })
             })
-                .then(response => response.json())
-                .then(data => {
-                    document.querySelector(`div[data-item-id="${cartItemId}"]`).remove();
-                    document.getElementById('total-amount').textContent = data.total_amount;
-                });
+            .then(response => response.json())
+            .then(data => {
+                cartItem.remove();
+                document.getElementById('total-amount').textContent = data.total_amount.toLocaleString();
+            })
+            .catch(error => console.error('Error removing cart item:', error));
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
     });
 </script>

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+{% if user.is_active %}
+<h1>판매자일 경우 아래에 상품 등록하러 갈 수 있는 링크가 보임</h1>
+{% if user.is_seller %}
+<a href="{% url 'sales:register_product' %}">상품 등록하기</a>
+<hr>
+<h1>등록한 상품</h1>
+{% for product in products %}
+<a href="{% url 'sales:edit_product' product.id %}">{{product}} 상품 수정하러가기</a>
+{% endfor %}
+{% endif %}
+<hr>
+<h1>결제한 내역이 있으면 아래에 주문내역 보기 버튼이 나옴</h1>
+{% if orders %}
+<a href="{% url 'orders:order_list' %}">주문내역 보기</a>
+{% endif %}
+{% else %}
+{% endif %}
+<hr>
+
+
+<h1>상품 리스트</h1>
+<br>
+{% for object in object_list %}
+<a href="{% url 'products:product_detail' object.id %}">{{ object.name }}</a>
+<hr>
+{% endfor %}
+
+
+
+
+{% endblock content %}
+
+
+{% block extra-script %}
+{% if messages %}
+{% for message in messages %}
+<script>
+    alert("{{ message }}");
+</script>
+{% endfor %}
+{% endif %}
+{% endblock extra-script %}

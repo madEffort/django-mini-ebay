@@ -1,10 +1,49 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block content %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">등록</button>
+    <p>
+        <label for="{{ form.category.id_for_label }}">카테고리</label>
+        {% render_field form.category class="form-control" %}
+    </p>
+    <p>
+        <label for="{{ form.name.id_for_label }}">상품명</label>
+        {% render_field form.name class="form-control" %}
+    </p>
+    <p>
+        <label for="{{ form.description.id_for_label }}">설명</label>
+        {% render_field form.description class="form-control" %}
+    </p>
+    <p>
+        <label for="{{ form.image.id_for_label }}">상품 이미지</label>
+        {% render_field form.image class="form-control" onchange="previewImage(event);" %}
+        <img id="image-preview" src="#" alt="Image Preview" style="display: none; max-width: 228px; max-height: 228px;"/>
+    </p>
+    <p>
+        <label for="{{ form.price.id_for_label }}">가격</label>
+        {% render_field form.price class="form-control" %}
+    </p>
+    <p>
+        <label for="{{ form.stock_quantity.id_for_label }}">재고 수량</label>
+        {% render_field form.stock_quantity class="form-control" %}
+    </p>
+
+    <button class="btn btn-outline-primary  w-100" type="submit">등록</button>
 </form>
-<a href="{% url 'home' %}">홈으로</a>
 {% endblock content %}
+
+{% block extra-script %}
+<script>
+function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        var output = document.getElementById('image-preview');
+        output.src = reader.result;
+        output.style.display = 'block';
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
+{% endblock extra-script %}
