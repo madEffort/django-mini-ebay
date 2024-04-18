@@ -6,12 +6,13 @@ authors = ["madEffort <madeffort0903@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.10.12"
+python = "3.10.5"
 django = "^5.0.4"
-python-decouple = "^3.8"
+django-cors-headers = "^4.3.1"
 pillow = "^10.3.0"
 django-widget-tweaks = "^1.5.0"
-django-cors-headers = "^4.3.1"
+python-decouple = "^3.8"
+psycopg2-binary = "^2.9.9"
 
 
 [build-system]
