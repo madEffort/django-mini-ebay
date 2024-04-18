@@ -95,6 +95,7 @@ This software uses the following open source packages:
 ## Related
 
 - [Bootstrap](https://getbootstrap.com/)
+- [AJAX](https://en.wikipedia.org/wiki/Ajax_(programming))
 
 ## Support
 
