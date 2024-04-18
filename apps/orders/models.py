@@ -29,6 +29,9 @@ class OrderDetail(models.Model):
     product_snapshot = models.ForeignKey(ProductSnapshot, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     price = models.IntegerField()
-
+    
+    class Meta:
+        ordering = ['-id']
+    
     def __str__(self):
         return f"Detail for Order {self.order.id}"

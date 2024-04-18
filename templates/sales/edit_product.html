@@ -1,13 +1,56 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
+['name', 'description', 'image', 'price', 'stock_quantity', 'category']
 {% block content %}
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">수정</button>
+    <p>
+        <label for="{{ form.category.id_for_label }}">카테고리</label>
+        {% render_field form.category class="form-control" %}
+    </p>
+    <p>
+        <label for="{{ form.name.id_for_label }}">상품명</label>
+        {% render_field form.name class="form-control" %}
+    </p>
+    <p>
+        <label for="{{ form.description.id_for_label }}">설명</label>
+        {% render_field form.description class="form-control" %}
+    </p>
+    <p>
+        <label for="{{ form.image.id_for_label }}">상품 이미지</label>
+        {% render_field form.image class="form-control" onchange="previewImage(event);" %}
+        <img id="image-preview" src="#" alt="Image Preview" style="display: none; max-width: 228px; max-height: 228px;"/>
+    </p>
+    <p>
+        <label for="{{ form.price.id_for_label }}">가격</label>
+        {% render_field form.price class="form-control" %}
+    </p>
+    <p>
+        <label for="{{ form.stock_quantity.id_for_label }}">재고 수량</label>
+        {% render_field form.stock_quantity class="form-control" %}
+    </p>
+
+    <button class="btn btn-outline-primary w-100 " type="submit">수정</button>
 </form>
+<div class="d-flex justify-content-end ">
 <form action="{% url 'sales:delete_product' product.id%}" method="post">
     {% csrf_token %}
-    <button type="submit">상품 삭제</button>
+    <button class="btn btn-outline-danger mt-3" type="submit">상품 삭제</button>
 </form>
+</div>
 {% endblock content %}
+
+{% block extra-script %}
+<script>
+function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        var output = document.getElementById('image-preview');
+        output.src = reader.result;
+        output.style.display = 'block';
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
+{% endblock extra-script %}

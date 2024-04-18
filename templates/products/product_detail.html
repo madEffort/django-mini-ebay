@@ -1,30 +1,52 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% load humanize %}
 
 {% block content %}
-상품 이름: {{ object.name }} <br>
-설명 : {{ object.description}} <br>
-가격 : {{ object.price|intcomma }}원 <br>
-남은 수량 : {{ object.stock_quantity }} <br>
-카테고리 : {{ object.category.name }}
-<br>
-<hr>
-<form method="post">
-    {% csrf_token %}
-    <input type="number" name="quantity" value="1" min="1">
-    <button type="submit" name="add_to_cart">장바구니 담기</button>
-    <button type="submit" name="order_now">바로 주문하기</button>
-</form>
-{% if form.errors %}
-<ul>
-    {% for field in form %}
-    {% for error in field.errors %}
-    <li>{{ error }}</li>
-    {% endfor %}
-    {% endfor %}
-</ul>
-{% endif %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- 이미지 -->
+            <img src="{{ object.image.url }}" alt="{{ object.name }}" class="img-fluid rounded">
+        </div>
+        <div class="col-md-6">
+            <!-- 상품 정보 -->
+            <h2>{{ object.name }}</h2>
+            <p class="text-muted">{{ object.category.name }}</p>
+            <p>{{ object.description }}</p>
+            <h3>{{ object.price|intcomma }}원</h3>
+            <p>남은 수량: {{ object.stock_quantity }}</p>
+            <hr>
+            <!-- 구매 옵션 폼 -->
+            <form method="post" class="form-inline">
+                {% csrf_token %}
+                <div class="form-group mb-2">
+                    <input type="number" name="quantity" value="1" min="1" class="form-control d-inline-block" style="width: 100px;">
+                    <button type="submit" name="add_to_cart" class="btn btn-outline-primary  mx-2">장바구니 담기</button>
+                    <button type="submit" name="order_now" class="btn btn-outline-success ">바로 주문하기</button>
+                </div>
+                
+            </form>
+            <!-- 폼 에러 메시지 -->
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock content %}
 
-<a href="{% url 'home' %}">홈으로</a>
+{% block extra-links %}
+<div class="container mt-3">
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary">홈으로</a>
+</div>
+{% endblock extra-links %}

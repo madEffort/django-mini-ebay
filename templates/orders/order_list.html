@@ -1,6 +1,30 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-{% for order in object_list %}
-주문시간 : {{order.order_date}} => <a href="{% url 'orders:order_detail' order.id %}">자세히 보기</a> <br>
-{% endfor %}
+<div class="container mt-5">
+    <h2>주문 내역</h2>
+    <hr>
+    {% if object_list %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">주문 날짜</th>
+                <th scope="col">상세 정보</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in object_list %}
+            <tr>
+                <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
+                <td><a href="{% url 'orders:order_detail' order.id %}" class="btn btn-outline-primary btn-sm">자세히 보기</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        주문 내역이 없습니다.
+    </div>
+    {% endif %}
+</div>
 {% endblock content %}

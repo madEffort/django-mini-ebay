@@ -36,8 +36,8 @@
         }
 
         footer {
-            padding: 30px 0;
-            background: #f7f7f7;
+            padding: 20px 0;
+            background: #f6f6f6;
         }
 
         .login-signup-btn {
@@ -77,20 +77,26 @@
                             {% endif %}
                         {% endif %}
                     </div>
-                    {% if user.is_authenticated %}
+                    {% if user.is_active %}
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link" href="{% url 'accounts:edit' %}">{{user}}</a>
+                        <a class="nav-link px-0" href="{% url 'accounts:edit' %}">{{user}}</a>
+                        <span class="nav-link">|</span>
+                        {% if user.is_seller %}
+                            <a class="nav-link px-0 " href="{% url 'sales:sales_list' %}">판매 내역</a>
+                        {% else %}
+                            <a class="nav-link px-0 " href="{% url 'orders:order_list' %}">주문 내역</a>
+                        {% endif %}
                         <span class="nav-link">|</span>
                         <form action="{% url 'accounts:logout' %}" method="post">
                             {% csrf_token %}
-                            <button class="nav-link" type="submit">로그아웃</button>
+                            <button class="nav-link px-0 " type="submit">로그아웃</button>
                         </form>
                     </div>
                     {% else %}
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link" href="{% url 'accounts:login' %}">로그인</a>
+                        <a class="nav-link px-0 " href="{% url 'accounts:login' %}">로그인</a>
                         <span class="nav-link">|</span>
-                        <a class="nav-link" href="{% url 'accounts:signup' %}">회원가입</a>
+                        <a class="nav-link px-0" href="{% url 'accounts:signup' %}">회원가입</a>
                     </div>
                     {% endif %}
                 </div>
@@ -106,6 +112,10 @@
         </div>
 
         <footer class="mt-5">
+            <div class="d-flex justify-content-center ">
+                <span class="text-center text-secondary mx-2">&copy; 2024 Copyright</span>
+                <a class="text-decoration-none fw-semibold text-secondary  " href="#">madEffort</a>
+            </div>
             {% block footer %} {% endblock footer%}
         </footer>
     </div>

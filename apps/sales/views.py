@@ -1,9 +1,12 @@
+from typing import Any
 from django.shortcuts import render, redirect, get_object_or_404
 from apps.products.forms import ProductForm
 from apps.products.models import Product
+from apps.orders.models import Order, OrderDetail
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 # 상품 등록
 @login_required
 def register_product(request):
@@ -55,3 +58,37 @@ def delete_product(request, pk):
         return redirect("home")
 
     return HttpResponse("Failed to delete product")
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def sales_list(request):
+    # 현재 로그인한 사용자가 판매자인 경우 해당 판매자가 등록한 상품 중 주문된 상품들을 조회합니다.
+    # 사용자 모델에 따라 판매자를 어떻게 식별할 수 있는지에 따라 코드가 달라질 수 있습니다.
+    # 예를 들어, 판매자 사용자 그룹을 사용한다면 그룹을 기반으로 필터링할 수 있습니다.
+    
+    # 판매자가 등록한 상품들의 ID 목록을 가져옵니다.
+    seller_products_ids = request.user.product_set.values_list('id', flat=True)
+
+    # 주문 상세(OrderDetail) 중에 해당 상품들이 포함된 것들을 가져옵니다.
+    sales_list = OrderDetail.objects.filter(product_snapshot__product__id__in=seller_products_ids)
+    # 조회된 주문 상세 정보를 템플릿으로 전달합니다.
+
+    return render(request, 'sales/sales_list.html', {'sales_list': sales_list})
+
+# @login_required
+# def sales_detail(request, pk):
+    
+#     # 현재 로그인한 사용자가 판매자인 경우 해당 판매자가 등록한 상품 중 주문된 상품들을 조회합니다.
+#     # 사용자 모델에 따라 판매자를 어떻게 식별할 수 있는지에 따라 코드가 달라질 수 있습니다.
+#     # 예를 들어, 판매자 사용자 그룹을 사용한다면 그룹을 기반으로 필터링할 수 있습니다.
+    
+#     # 판매자가 등록한 상품들의 ID 목록을 가져옵니다.
+#     seller_products_ids = request.user.product_set.values_list('id', flat=True)
+
+#     # 주문 상세(OrderDetail) 중에 해당 상품들이 포함된 것들을 가져옵니다.
+#     sales_list = OrderDetail.objects.filter(product_snapshot__product__id__in=seller_products_ids)
+#     order = sales_list.filter(order_id=pk)
+#     # 조회된 주문 상세 정보를 템플릿으로 전달합니다.
+#     return render(request, 'sales/sales_detail.html', {'order': order})

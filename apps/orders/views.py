@@ -53,6 +53,7 @@ def order_create(request):
                 stock_quantity=item.product.stock_quantity,
                 category=item.product.category,
             )
+                
             else: 
                 snapshot = latest_snapshot
             
@@ -62,6 +63,10 @@ def order_create(request):
                 quantity=item.quantity,
                 price=snapshot.price,
             )
+            
+            item.product.stock_quantity -= item.quantity
+            item.product.save()
+            
 
         # DB에 저장한 후에는 카트 비우기
         cart_items.delete()

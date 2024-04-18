@@ -1,21 +1,74 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
 {% load humanize %}
 
 {% block content %}
-<h1>아래의 상품들을 주문하시겠습니까?</h1>
-{% for cart_item in cart_items %}
-{{ cart_item.product }} | {{ cart_item.product.price|intcomma }}원 | {{ cart_item.quantity }}개 <br>
-{% endfor %}
-<hr>
-총 {{ total_amount|intcomma }}원
-<br>
-<hr>
-{% if total_amount != 0 %}
-<form method="post">
-    {% csrf_token %}
-    <button type="post">결제하기</button>
-</form>
-{% endif %}
+<div class="container mt-5">
+    <h2>주문</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">상품 이미지</th>
+                    <th scope="col">상품명</th>
+                    <th scope="col">카테고리</th>
+                    <th scope="col">가격</th>
+                    <th scope="col">설명</th>
+                    <th scope="col">수량</th>
+                    <th scope="col">합계</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cart_item in cart_items %}
+                <tr>
+                    <td><img src="{{ cart_item.product.image.url }}" alt="{{ cart_item.product.name }}" class="img-fluid" width="80"></td>
+                    <td>{{ cart_item.product.name }}</td>
+                    <td>{{ cart_item.product.category.name }}</td>
+                    <td>{{ cart_item.product.price|intcomma }}원</td>
+                    <td>{{ cart_item.product.description }}</td>
+                    <td>{{ cart_item.quantity }}개</td>
+                    <td>{{ cart_item.product.price|multiply:cart_item.quantity|intcomma }}원</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-end ">
+        <h3 class="text-right">총 금액: {{ total_amount|intcomma }}원</h3>
+    </div>
 
-<a href="{% url 'home' %}">홈으로</a>
+    <div class="d-flex justify-content-end ">
+        {% if total_amount != 0 %}
+        <form method="post" class="text-right">
+            {% csrf_token %}
+            <button type="button" id="payButton" class="btn btn-outline-primary ">결제하기</button>
+            <div id="paymentValidation" style="display: none; margin-top: 10px;">
+                <input class="" type="text" id="validationInput" placeholder="'결제'라고 입력하세요.">
+                <button type="submit" class="btn btn-outline-success ">결제</button>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+
+</div>
 {% endblock content %}
+
+{% block extra-script %}
+<script>
+    document.getElementById('payButton').addEventListener('click', function() {
+        document.getElementById('paymentValidation').style.display = 'block';
+        this.style.display = 'none'; // Hide the '결제하기' button after it's clicked
+    });
+    
+    document.getElementById('paymentForm').onsubmit = function() {
+        var validationInput = document.getElementById('validationInput').value;
+        if (validationInput === '결제') {
+            return true; // Allow form submission
+        } else {
+            alert('올바른 키워드를 입력해 주세요: "결제"');
+            return false; // Prevent form submission
+        }
+    };
+    </script>
+{% endblock extra-script %}

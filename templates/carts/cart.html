@@ -4,7 +4,8 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center mb-4">장바구니</h1>
+    <h2>장바구니</h2>
+    <hr>
     <div class="cart-items">
         {% for cart_item in cart_items %}
             <div class="cart-item d-flex align-items-center justify-content-start mb-3 p-2 bg-light rounded" data-item-id="{{ cart_item.id }}">
@@ -26,17 +27,16 @@
             </div>
         {% endfor %}
     </div>
+
+    {% if total_amount != 0 %}
     <hr>
     <div class="d-flex justify-content-end align-items-center">
-        <h4>총 <span id="total-amount">{{ total_amount|intcomma }}</span>원</h4>
-        
+        <h3>총 금액: <span id="total-amount">{{ total_amount|intcomma }}</span>원</h3>
     </div>
-
     <div class="d-flex justify-content-end align-items-center">
-    {% if total_amount != 0 %}
-            <a class="btn btn-primary ml-3" href="{% url 'orders:order_create' %}">주문하기</a>
-        {% endif %}
+        <a class="btn btn-outline-primary" href="{% url 'orders:order_create' %}">주문하기</a>
     </div>
+    {% endif %}
 </div>
 {% endblock content %}
 

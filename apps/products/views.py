@@ -75,6 +75,10 @@ def product_detail(request, pk):
                             cart_detail.quantity += quantity
                         else:
                             cart_detail.quantity = quantity
+                            
+                        product.stock_quantity -= quantity
+                        product.save()
+
                         cart_detail.save()
                     return redirect("orders:order_create")
                 # 유효성 검사를 통과하지 못했을 경우 에러메시지를 form에 넣어줌

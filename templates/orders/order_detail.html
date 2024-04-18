@@ -1,15 +1,47 @@
 {% extends 'base.html' %}
-
+{% load static %}
+{% load custom_filters %}
 {% load humanize %}
 
 {% block content %}
-<h1>구매 내역</h1>
-{% for detail in object.orderdetail_set.all %}
-    {{ detail.product_snapshot.product }}
-    {{ detail.product_snapshot.name }} | {{ detail.price|intcomma }}원 X {{ detail.quantity }}개 <br>
-{% endfor %}
-<hr>
-<h3>총 {{object.total_amount|intcomma}}원</h3>
-<br>
-<a href="{% url 'home' %}">홈으로</a>
+<div class="container mt-5">
+    <h2>주문 내역</h2>
+    <hr>
+    {% if object.orderdetail_set.all %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">상품 이미지</th>
+                <th scope="col">상품명</th>
+                <th scope="col">설명</th>
+                <th scope="col">단가</th>
+                <th scope="col">수량</th>
+                <th scope="col">합계</th>
+                <th scope="col">상태</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detail in object.orderdetail_set.all %}
+            <tr>
+                <td><img src="{{ detail.product_snapshot.product.image.url }}" alt="{{ detail.product_snapshot.product.name }}" class="img-fluid" width="100"></td>
+                <td>{{ detail.product_snapshot.name }}</td>
+                <td>{{ detail.product_snapshot.description }}</td>
+                <td>{{ detail.price|intcomma }}원</td>
+                <td>{{ detail.quantity }}</td>
+                <td>{{ detail.price|multiply:detail.quantity|intcomma }}원</td>
+                <td>{{ detail.order.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-end ">
+        <h3 class="text-right">총 금액: {{ object.total_amount|intcomma }}원</h3>
+    </div>
+    
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        이 주문에 대한 상세 내역이 없습니다.
+    </div>
+    {% endif %}
+</div>
 {% endblock content %}

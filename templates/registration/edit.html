@@ -26,9 +26,12 @@
     </p>
     <button class="btn btn-outline-primary  w-100 mb-2" type="submit">변경</button>
 </form>
-<a class="btn btn-outline-success" href="{% url 'accounts:password_change' %}">비밀번호 변경</a>
-<form action="{% url 'accounts:delete_account' %}" method="post" class=" d-inline-block ">
-    {% csrf_token %}
-    <button class="btn btn-outline-danger  " type="submit" onclick="return confirm('정말로 삭제하시겠습니까?');">계정 삭제</button>
-</form>
+<div class="d-flex justify-content-end mt-3 ">
+    <a class="btn btn-outline-success mx-2" href="{% url 'accounts:password_change' %}">비밀번호 변경</a>
+    <form action="{% url 'accounts:delete_account' %}" method="post" class=" d-inline-block ">
+        {% csrf_token %}
+        <button class="btn btn-outline-danger  " type="submit" onclick="return confirm('정말로 삭제하시겠습니까?');">계정 삭제</button>
+    </form>
+</div>
+
 {% endblock content %}

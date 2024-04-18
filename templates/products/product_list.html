@@ -68,7 +68,7 @@
 
     {% if user.is_seller %}
         <!-- 판매자 모드 -->
-        <h2 id="category-name-seller">{{user}}님이 등록하신 상품 목록</h2>
+        <h2 id="category-name-seller">{{user}}님의 상품 목록</h2>
         <hr>
         <div class="row mt-4" id="product-display-seller">
         {% for product in products %}
@@ -77,7 +77,7 @@
                     <a class="text-decoration-none " href="{% url 'sales:edit_product' product.id %}">
                         <div class="card-body">
                             <div>
-                                <img src="/uploads/{{product.image}}" alt="{{product}}" width="100%" height="228" class="mb-2 ">
+                                <img src="{{product.image.url}}" alt="{{product}}" width="100%" height="228" class="mb-2 ">
                                 <h5 class="card-title truncate">{{product.name}}</h5>
                                 <h5 class="card-text text-decoration-none text-black">{{product.price|intcomma}}원</h5>
                             </div>
@@ -85,6 +85,7 @@
                     </a>
                 </div>
             </div>
+        </div>
         {% endfor %}
         {% else %}
         <!-- 로그인 일반 모드 -->
@@ -97,8 +98,8 @@
                         <div class="card mb-4">
                             <a class="text-decoration-none " href="{% url 'products:product_detail' object.id %}">
                                 <div class="card-body">
-                                    <div>
-                                        <img src="/uploads/{{object.image}}" alt="{{object}}" width="100%" height="228" class="mb-2 ">
+                                    <div> 
+                                        <img src="{{object.image.url}}" alt="{{object.image.name}}" width="100%" height="228" class="mb-2 ">
                                         <h5 class="card-title truncate">{{object.name}}</h5>
                                         <h5 class="card-text text-decoration-none text-black">{{object.price|intcomma}}원</h5>
                                     </div>
@@ -183,7 +184,7 @@
                             <a class="text-decoration-none " href="{% url 'products:product_detail' cart_item.product.id %}">
                                 <div class="row">
                                     <div class="col-4 px-4">
-                                        <img src="/uploads/{{cart_item.product.image}}" alt="{{cart_item.product.name}}" width="80">
+                                        <img src="{{cart_item.product.image.url}}" alt="{{cart_item.product.name}}" width="80">
                                     </div>
                                     <div class="col-8 px-4">
                                         <div class="truncate">{{cart_item.product.name}}</div>
@@ -206,7 +207,7 @@
                 <a class="text-decoration-none " href="{% url 'products:product_detail' object.id %}">
                     <div class="card-body">
                         <div>
-                            <img src="/uploads/{{object.image}}" alt="{{object}}" width="100%" height="228" class="mb-2 ">
+                            <img src="{{object.image.url}}" alt="{{object.image.name}}" width="100%" height="228" class="mb-2 ">
                             <h5 class="card-title truncate">{{object.name}}</h5>
                             <h5 class="card-text text-decoration-none text-black">{{object.price|intcomma}}원</h5>
                         </div>
@@ -277,6 +278,7 @@
             </nav>
         {% endif %}
     </div>
+</div>
 {% endif %}
 
 {% endblock content %}
@@ -315,20 +317,20 @@
                 products.forEach(product => {
                     htmlContent += `
                     <div class="col-3">
-                <div class="card mb-4">
-                    <a class="text-decoration-none " href="/sales/edit/${product.pk}">
-                        <div class="card-body">
-                            <div>
-                                <img src="/uploads/${product.fields.image}" alt="${product.fields.name}" width="100%" height="228" class="mb-2 ">
-                                <h5 class="card-title truncate">${product.fields.name}</h5>
-                                <h5 class="card-text text-decoration-none text-black">${product.fields.price.toLocaleString()}원</h5>
-                            </div>
+                        <div class="card mb-4">
+                            <a class="text-decoration-none " href="/sales/edit/${product.pk}">
+                                <div class="card-body">
+                                    <div>
+                                        <img src="/uploads/${product.fields.image}" alt="${product.fields.name}" width="100%" height="228" class="mb-2 ">
+                                        <h5 class="card-title truncate">${product.fields.name}</h5>
+                                        <h5 class="card-text text-decoration-none text-black">${product.fields.price.toLocaleString()}원</h5>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
-            </div>`;
+                    </div>`;
                 });
-                document.getElementById('category-name-seller').textContent = '"'+categoryName+'"' + ' 카테고리에 등록하신 상품 목록';
+                document.getElementById('category-name-seller').textContent = '"'+categoryName+'"' + ' 카테고리에 등록된 상품 목록';
                 document.getElementById("product-display-seller").innerHTML = htmlContent;
             } else {
                 document.getElementById('category-name').innerHTML = '"'+categoryName+'"' + " 상품 목록";
@@ -347,7 +349,7 @@
                             </div>
                         </div>`;
                     });
-                    document.getElementById('product-display-login').innerHTML = '<div class="row mt-4">' + htmlContent + '</div>';
+                    document.getElementById('product-display-login').innerHTML = '<div class="row">' + htmlContent + '</div>';
                 }
                 if(nologinDisplay != null) {
                     products.forEach(product => {
@@ -364,7 +366,7 @@
                             </div>
                         </div>`;
                     });
-                    document.getElementById('product-display-nologin').innerHTML = '<div class="row mt-4">' + htmlContent + '</div>';
+                    document.getElementById('product-display-nologin').innerHTML = '<div class="row">' + htmlContent + '</div>';
                 }
                 
                 
