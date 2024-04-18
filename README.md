@@ -57,6 +57,7 @@
 - **Sales List:** Sellers can track sales of their listed products, viewing details of the orders that included their products.
 - **Detailed View (Commented Out):** Ability to view detailed sales information based on individual product orders, though this feature is currently disabled in the code.
 
+To view the **`Database ERD`**, please click [here](https://www.erdcloud.com/p/jqxkv2rJ2SM2b685v).
 
 ## How To Use
 
@@ -90,11 +91,12 @@ This software uses the following open source packages:
 
 - [Python](https://www.python.org/)
 - [Django](https://www.djangoproject.com/)
-- [PostgreSQL](https://www.postgresql.org/)
+- [SQLite](https://sqlite.org/)
 
 ## Related
 
 - [Bootstrap](https://getbootstrap.com/)
+- [AJAX](https://en.wikipedia.org/wiki/Ajax_(programming))
 
 ## Support
 
