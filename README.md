@@ -80,7 +80,7 @@ $ python manage.py runserver
 
 ## Download
 
-You can [download](https://github.com/madEffort/django-mini-ebay/releases) the latest release version of the MiniBucks.
+You can [download](https://github.com/madEffort/django-mini-ebay/releases) the latest release version of the MiniEbay.
 
 ## Credits
 
