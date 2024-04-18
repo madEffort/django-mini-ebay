@@ -9,26 +9,44 @@
         <p>
             <label for="{{ form.username.id_for_label }}">아이디</label>
             {% render_field form.username class="form-control" %}
+            {% if form.username.errors %}
+                <div class="alert alert-danger">{{ form.username.errors.as_text }}</div>
+            {% endif %}
         </p>
         <p>
             <label for="{{ form.password1.id_for_label }}">비밀번호</label>
             {% render_field form.password1 class="form-control" %}
+            {% if form.password1.errors %}
+                <div class="alert alert-danger">{{ form.password1.errors.as_text }}</div>
+            {% endif %}
         </p>
         <p>
             <label for="{{ form.password2.id_for_label }}">비밀번호 확인</label>
             {% render_field form.password2 class="form-control" %}
+            {% if form.password2.errors %}
+                <div class="alert alert-danger">{{ form.password2.errors.as_text }}</div>
+            {% endif %}
         </p>
         <p>
             <label for="{{ form.first_name.id_for_label }}">이름</label>
             {% render_field form.first_name class="form-control" %}
+            {% if form.first_name.errors %}
+                <div class="alert alert-danger">{{ form.first_name.errors.as_text }}</div>
+            {% endif %}
         </p>
         <p>
             <label for="{{ form.last_name.id_for_label }}">성(이름)</label>
             {% render_field form.last_name class="form-control" %}
+            {% if form.last_name.errors %}
+                <div class="alert alert-danger">{{ form.last_name.errors.as_text }}</div>
+            {% endif %}
         </p>
         <p>
             <label for="{{ form.email.id_for_label }}">이메일(필수)</label>
             {% render_field form.email class="form-control" %}
+            {% if form.email.errors %}
+                <div class="alert alert-danger">{{ form.email.errors.as_text }}</div>
+            {% endif %}
         </p>
         <button class="btn btn-outline-primary w-100 " type="submit" class="submit-button">가입하기</button>
     </form>

@@ -18,6 +18,9 @@ class Order(models.Model):
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default="processing"
     )
+    
+    class Meta:
+        ordering = ['-id']
 
     def __str__(self):
         return f"Order {self.id} by {self.user.username}"
