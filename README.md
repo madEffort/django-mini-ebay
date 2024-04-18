@@ -7,6 +7,7 @@
 </h1>
 
 <h4 align="center">
+  A simple MiniEbay app for quick product selection, cart management, and payment.
 </h4>
 
 <p align="center">
@@ -20,6 +21,7 @@
   <a href="#key-features">Key Features</a> • <a href="#how-to-use">How To Use</a> • <a href="#download">Download</a> • <a href="#credits">Credits</a> • <a href="#related">Related</a> • <a href="#support">Support</a> • <a href="#license">License</a>
 </p>
 
+![miniebay](https://github.com/madEffort/django-mini-ebay/assets/158125247/f989370d-b4f4-47b1-b831-e9e3815934ea)
 
 ## Key Features
 
