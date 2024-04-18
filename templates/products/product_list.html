@@ -4,13 +4,6 @@
 
 {% block extra-style %}
     <style>
-        
-        .truncate {
-            white-space: nowrap; /* 글자들을 한 줄에 표시 */
-            overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
-            text-overflow: ellipsis; /* 넘친 내용을 ellipsis(...)로 표시 */
-            max-width: 100%; /* 최대 너비 설정 */
-        }
 
         .pagination a {
             transition: color 0.3s, background-color 0.3s;
@@ -78,15 +71,16 @@
                         <div class="card-body">
                             <div>
                                 <img src="{{product.image.url}}" alt="{{product}}" width="100%" height="228" class="mb-2 ">
-                                <h5 class="card-title truncate">{{product.name}}</h5>
+                                <h5 class="card-title text-truncate">{{product.name}}</h5>
+                                <p class="text-decoration-none text-secondary text-truncate ">{{product.description}}</p>
                                 <h5 class="card-text text-decoration-none text-black">{{product.price|intcomma}}원</h5>
                             </div>
                         </div>
                     </a>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
         {% else %}
         <!-- 로그인 일반 모드 -->
         <div class="row mt-4">
@@ -100,7 +94,8 @@
                                 <div class="card-body">
                                     <div> 
                                         <img src="{{object.image.url}}" alt="{{object.image.name}}" width="100%" height="228" class="mb-2 ">
-                                        <h5 class="card-title truncate">{{object.name}}</h5>
+                                        <h5 class="card-title text-truncate ">{{object.name}}</h5>
+                                        <p class="text-decoration-none text-secondary text-truncate ">{{object.description}}</p>
                                         <h5 class="card-text text-decoration-none text-black">{{object.price|intcomma}}원</h5>
                                     </div>
                                 </div>
@@ -208,7 +203,8 @@
                     <div class="card-body">
                         <div>
                             <img src="{{object.image.url}}" alt="{{object.image.name}}" width="100%" height="228" class="mb-2 ">
-                            <h5 class="card-title truncate">{{object.name}}</h5>
+                            <h5 class="card-title text-truncate ">{{object.name}}</h5>
+                            <p class="text-decoration-none text-secondary text-truncate ">{{object.description}}</p>
                             <h5 class="card-text text-decoration-none text-black">{{object.price|intcomma}}원</h5>
                         </div>
                     </div>
@@ -322,7 +318,8 @@
                                 <div class="card-body">
                                     <div>
                                         <img src="/uploads/${product.fields.image}" alt="${product.fields.name}" width="100%" height="228" class="mb-2 ">
-                                        <h5 class="card-title truncate">${product.fields.name}</h5>
+                                        <h5 class="card-title text-truncate">${product.fields.name}</h5>
+                                        <p class="text-decoration-none text-secondary text-truncate ">${product.fields.description}</p>
                                         <h5 class="card-text text-decoration-none text-black">${product.fields.price.toLocaleString()}원</h5>
                                     </div>
                                 </div>
@@ -342,7 +339,8 @@
                                 <a class="text-decoration-none" href="/products/products/${product.pk}">
                                     <div class="card-body">
                                         <img src="/uploads/${product.fields.image}" alt="${product.fields.name}" width="100%" height="228" class="mb-2">
-                                        <h5 class="card-title truncate">${product.fields.name}</h5>
+                                        <h5 class="card-title text-truncate">${product.fields.name}</h5>
+                                        <p class="text-decoration-none text-secondary text-truncate ">${product.fields.description}</p>
                                         <h5 class="card-text text-decoration-none text-black">${product.fields.price.toLocaleString()}원</h5>
                                     </div>
                                 </a>
@@ -359,7 +357,8 @@
                                 <a class="text-decoration-none" href="/products/products/${product.pk}">
                                     <div class="card-body">
                                         <img src="/uploads/${product.fields.image}" alt="${product.fields.name}" width="100%" height="228" class="mb-2">
-                                        <h5 class="card-title truncate">${product.fields.name}</h5>
+                                        <h5 class="card-title text-truncate">${product.fields.name}</h5>
+                                        <p class="text-decoration-none text-secondary text-truncate ">${product.fields.description}</p>
                                         <h5 class="card-text text-decoration-none text-black">${product.fields.price.toLocaleString()}원</h5>
                                     </div>
                                 </a>
