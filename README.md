@@ -1,8 +1,8 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/madEffort/django-mini-ebay.git"><img src="" alt="MiniEbay" width="200">작업 중</a>
-  <br>
-  MiniEbay
+  <a href="https://github.com/madEffort/django-mini-ebay.git">
+    <img src="https://github.com/madEffort/django-mini-ebay/assets/158125247/41edec39-5850-43c0-be73-d3095a400893" alt="MiniEbay" width="400">
+  </a>
   <br>
 </h1>
 
@@ -11,8 +11,7 @@
 
 <p align="center">
 <a href="https://github.com/madEffort/django-mini-ebay/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue"></a>
-<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-v3.10.12-yellow"></a>
-<a href="https://hits.seeyoufarm.com"><img src=""/></a>
+<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-v3.10.5-yellow"></a>
 <a href="https://github.com/madEffort/django-mini-ebay.git"><img src="https://img.shields.io/badge/PRs-welcome-green"></a>
 <a href="https://www.paypal.me/madEffort"><img src="https://img.shields.io/badge/$-donate-ff69b4"></a>
 </p>
@@ -24,34 +23,37 @@
 
 ## Key Features
 
-**2024/04/15 - 현재 구현된 기능**
+**1. Product Registration and Management**
+- **Registration:** Sellers can register new products using a form that captures product details.
+- **Edit:** Sellers can edit existing product details through a form prefilled with existing data.
+- **Deletion:** Products can be deleted directly if the seller chooses, with confirmation of deletion.
 
-- 유저 관련 기능
-  - 회원 가입, 탈퇴
-  - 로그인, 회원 정보 수정
-- 구매자 기능
-  - 판매 중인 물건 구매
-- 판매자 기능
-  - 판매할 물건 등록, 삭제, 수정(상품 수정 시 구매내역의 상품과 연결되어 구매내역의 가격이 변동될 가능성을 차단하기 위해 상품 스냅샷 모델 구축)
-- 구매 이력 조회
-- 장바구니 기능
+**2. Product Listings and Filtering**
+- **Filter by Category:** Products can be sorted into their respective categories for easy browsing.
+- **Pagination:** Manage the display of products effectively using pagination.
+- **Seller-based Filtering:** Products associated with sellers allow filtering based on the seller's inventory.
 
+**3. Shopping Cart and Checkout Process**
+- **Add to Cart:** Users can place items in the shopping cart with specified quantities.
+- **Update Cart:** Users can dynamically update the cart items, including increasing or decreasing the quantity or removing items.
+- **Checkout:** The checkout process includes reviewing the cart, adjusting quantities, and confirming purchase details, leading to order creation.
 
-pip 사용자의 경우
-```bash
-# Clone this repository
-$ git clone https://github.com/madEffort/django-mini-ebay.git
+**4. User Authentication and Management**
+- **Signup and Login:** Includes user registration with login functionality post-signup automatically.
+- **Account Deletion:** Users can delete their account if they choose to, with a confirmation process.
+- **Profile Management:** Users can edit their profiles and change passwords using dedicated forms.
 
-# Go into the repository
-$ cd django-mini-ebay
+**5. Order Management**
+- **View Orders:** Users can view a detailed list of their past orders.
+- **Order Details:** Users can access detailed logs of individual orders, including product snapshots at the time of order.
+- **Place Orders:** Users can finalize their purchases by transferring items from the cart to order, adjusting product stocks accordingly.
 
-# Install dependencies
-$ pip install
-```
-슈퍼유저 생성후 카테고리를 추가하고 상품 추가해줘야 합니다.
+**6. Category-based Product Browsing**
+- **Dynamic Selection:** Users can select categories from a dropdown to filter products displayed according to the chosen category.
 
-슈퍼유저 생성시 이메일은 **필수**로 입력하여야 합니다.
-
+**7. Sales Tracking**
+- **Sales List:** Sellers can track sales of their listed products, viewing details of the orders that included their products.
+- **Detailed View (Commented Out):** Ability to view detailed sales information based on individual product orders, though this feature is currently disabled in the code.
 
 
 ## How To Use
@@ -68,7 +70,6 @@ $ cd django-mini-ebay
 # Install dependencies
 $ poetry install
 ```
-
 
 After setting up the database and templates, please use the `makemigrations`, `migrate` and `collectstatic` commands.
 
@@ -91,7 +92,7 @@ This software uses the following open source packages:
 
 ## Related
 
-
+- [Bootstrap](https://getbootstrap.com/)
 
 ## Support
 
