@@ -7,7 +7,7 @@
 </h1>
 
 <h4 align="center">
-  An all-in-one MiniEbay app for essential product selection, cart management, and streamlined payment processing.
+  An all-in-one MiniEbay app for essential product selection, cart management, and quick payment.
 </h4>
 
 <p align="center">
