@@ -8,7 +8,6 @@ from apps.orders.models import Order
 from django.http import JsonResponse
 import json
 from django.core.serializers import serialize
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 class ProductList(ListView):
     model = Product

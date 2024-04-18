@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth import get_user_model, logout
@@ -7,7 +7,6 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 User = get_user_model()
 
