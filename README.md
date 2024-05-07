@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="#key-features">Key Features</a> • <a href="#how-to-use">How To Use</a> • <a href="#download">Download</a> • <a href="#credits">Credits</a> • <a href="#related">Related</a> • <a href="#support">Support</a> • <a href="#license">License</a>
+  <a href="#key-features">Key Features</a> • <a href="#database-erd">Database ERD</a> • <a href="#how-to-use">How To Use</a> • <a href="#download">Download</a> • <a href="#credits">Credits</a> • <a href="#related">Related</a> • <a href="#support">Support</a> • <a href="#license">License</a>
 </p>
 
 ![miniebay](https://github.com/madEffort/django-mini-ebay/assets/158125247/f989370d-b4f4-47b1-b831-e9e3815934ea)
@@ -56,6 +56,8 @@
 **7. Sales Tracking**
 - **Sales List:** Sellers can track sales of their listed products, viewing details of the orders that included their products.
 - **Detailed View (Commented Out):** Ability to view detailed sales information based on individual product orders, though this feature is currently disabled in the code.
+
+## Database ERD
 
 To view the **`Database ERD`**, please click [here](https://www.erdcloud.com/p/jqxkv2rJ2SM2b685v).
 
